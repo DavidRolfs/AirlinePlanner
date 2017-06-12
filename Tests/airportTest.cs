@@ -21,6 +21,7 @@ namespace Planner
 
       Assert.Equal(0, result);
     }
+
     [Fact]
     public void Test_Equal_ReturnsTrueForSameName()
     {
@@ -29,6 +30,7 @@ namespace Planner
 
       Assert.Equal(firstAirport, secondAirport);
     }
+
     [Fact]
     public void Test_Save_SavesAirportToDatabase()
     {
@@ -40,6 +42,33 @@ namespace Planner
 
       Assert.Equal(testList, result);
     }
+
+    [Fact]
+    public void Test_Save_AssignsIdToCategoryObject()
+    {
+      Airport testAirport = new Airport("Milwaukee");
+      testAirport.Save();
+
+      Airport savedAirport = Airport.GetAll()[0];
+
+      int result = savedAirport.GetId();
+      int testId = testAirport.GetId();
+
+      Assert.Equal(testId, result);
+    }
+
+    [Fact]
+    public void Test_Find_FindsAirportInDatabase()
+    {
+      Airport testAirport = new Airport("Milwaukee");
+      testAirport.Save();
+
+      Airport foundAirport = Airport.Find(testAirport.GetId());
+
+      Assert.Equal(testAirport, foundAirport);
+    }
+
+
 
     public void Dispose()
     {
