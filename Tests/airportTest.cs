@@ -6,9 +6,8 @@ using System.Data.SqlClient;
 
 namespace Planner
 {
-//  [Colleciton("Planner")]
-  public class AirportTest
-  // : IDisposable
+  [Collection("Planner")]
+  public class AirportTest : IDisposable
   {
     public AirportTest()
     {
@@ -29,6 +28,22 @@ namespace Planner
       Airport secondAirport = new Airport("Milwaukee");
 
       Assert.Equal(firstAirport, secondAirport);
+    }
+    [Fact]
+    public void Test_Save_SavesAirportToDatabase()
+    {
+      Airport testAirport = new Airport("Milwaukee");
+      testAirport.Save();
+
+      List<Airport> result = Airport.GetAll();
+      List<Airport> testList = new List<Airport>{testAirport};
+
+      Assert.Equal(testList, result);
+    }
+
+    public void Dispose()
+    {
+      Airport.DeleteAll();
     }
   }
 }

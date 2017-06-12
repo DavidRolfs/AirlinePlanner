@@ -69,10 +69,39 @@ namespace Planner
       return allAirports;
     }
 
+    public void Save()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
 
+      SqlCommand cmd = new SqlCommand("INSERT INTO airport (name) OUTPUT INSERTED.id VALUES (@AirportName);", conn);
 
+      SqlParameter nameParameter = new SqlParameter();
+      nameParameter.ParameterName = "@AirportName";
+      nameParameter.Value = this.GetName();
+      cmd.Parameters.Add(nameParameter);
+      SqlDataReader rdr = cmd.ExecuteReader();
 
-
-
+      while(rdr.Read())
+      {
+        this._id = rdr.GetInt32(0);
+      }
+      if (rdr != null)
+      {
+        rdr.Close();
+      }
+      if(conn != null)
+      {
+        conn.Close();
+      }
+    }
+    public static void DeleteAll()
+    {
+      SqlConnection conn = DB.Connection();
+      conn.Open();
+      SqlCommand cmd = new SqlCommand("DELETE FROM airport;", conn);
+      cmd.ExecuteNonQuery();
+      conn.Close();
+    }
   }
 }
