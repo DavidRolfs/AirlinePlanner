@@ -22,5 +22,13 @@ namespace Planner
 
       Assert.Equal(0, result);
     }
+    [Fact]
+    public void Test_Equal_ReturnsTrueForSameName()
+    {
+      Airport firstAirport = new Airport("Milwaukee");
+      Airport secondAirport = new Airport("Milwaukee");
+
+      Assert.Equal(firstAirport, secondAirport);
+    }
   }
 }
