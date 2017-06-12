@@ -68,11 +68,67 @@ namespace Planner
       Assert.Equal(testAirport, foundAirport);
     }
 
+    [Fact]
+    public void Delete_DeletesAirportFromDatabase_AirportList()
+    {
+      Airport testAirport1 = new Airport("Milwaukee");
+      testAirport1.Save();
+
+      Airport testAirport2 = new Airport("Chicago");
+      testAirport2.Save();
+
+      testAirport1.Delete();
+      List<Airport> resultAirport = Airport.GetAll();
+      List<Airport> testAirportList = new List<Airport>{testAirport2};
+
+      Assert.Equal(testAirportList, resultAirport);
+    }
+
+    [Fact]
+    public void Test_AddFLight_AddsFlightToAirport()
+    {
+      Airport testAirport = new Airport("Milwaukee");
+
+      Flight testFlight = new Flight("to Denver");
+      testFlight.Save();
+
+      Flight testFlight2 = new Flight("to Chicago");
+      testFlight2.Save();
+
+      testAirport.AddFlight(testFlight);
+      testAirport.AddFlight(testFlight2);
+
+      List<Flight> result = testAirport.GetFlights();
+      List<Flight> testList = new List<Flight>{testFlight, testFlight2};
+
+      Assert.Equal(testList, result);
+    }
+
+    [Fact]
+    public void GetFlights_ReturnAllAirportFlights_FlightList()
+    {
+      Airport testAirport = new Airport("Milwaukee");
+      testAirport.Save();
+
+      Flight testFlight1 = new Flight("to Denver");
+      testFlight1.Save();
+
+      Flight testFlight2 = new Flight("to Chicago");
+      testFlight2.Save();
+
+      testAirport.AddFlight(testFlight1);
+      List<Flight> savedFLights = testAirport.GetFlights();
+      List<Flight> testList = new List<Flight> {testFlight1};
+
+      Assert.Equal(testList, savedFLights);
+    }
+
 
 
     public void Dispose()
     {
       Airport.DeleteAll();
+      Flight.DeleteAll();
     }
   }
 }
