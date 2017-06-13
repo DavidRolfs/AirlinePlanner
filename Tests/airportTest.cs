@@ -123,6 +123,28 @@ namespace Planner
       Assert.Equal(testList, savedFLights);
     }
 
+    [Fact]
+    public void Delete_DeletesAirportAssociationsFromDatabase_AirportList()
+    {
+      //Arrange
+      Flight testFlight = new Flight("Mow the lawn");
+      testFlight.Save();
+
+      string testName = "Home stuff";
+      Airport testAirport = new Airport(testName);
+      testAirport.Save();
+
+      //Act
+      testAirport.AddFlight(testFlight);
+      testAirport.Delete();
+
+      List<Airport> result = testFlight.GetAirports();
+      List<Airport> test = new List<Airport> {};
+
+      //Assert
+      Assert.Equal(test, result);
+    }
+
 
 
     public void Dispose()

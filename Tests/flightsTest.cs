@@ -54,7 +54,7 @@ namespace Planner
     public void Save_AssignsIdToObject_id()
     {
       //Arrange
-      Flight testFlight = new Flight("Mow the lawn");
+      Flight testFlight = new Flight("to Denver");
       testFlight.Save();
 
       //Act
@@ -71,7 +71,7 @@ namespace Planner
     public void Find_FindsFlightInDatabase_Flight()
     {
       //Arrange
-      Flight testFlight = new Flight("Mow the lawn");
+      Flight testFlight = new Flight("to Denver");
       testFlight.Save();
 
       //Act
@@ -80,8 +80,61 @@ namespace Planner
       //Assert
       Assert.Equal(testFlight, result);
     }
+    [Fact]
+    public void AddAirport_AddsAirpotToFlight_AirportList()
+    {
+      Flight testFlight = new Flight("to denver");
+      testFlight.Save();
 
-public void Dispose()
+      Airport testAirport = new Airport("Milwaukee");
+      testAirport.Save();
+
+      testFlight.AddAirport(testAirport);
+
+      List<Airport> result = testFlight.GetAirports();
+      List<Airport> testList = new List<Airport>{testAirport};
+
+      Assert.Equal(testList, result);
+    }
+
+    [Fact]
+    public void GetAirports_ReturnsAllFLightAirports_AirportList()
+    {
+      Flight testFlight = new Flight("to Denver");
+      testFlight.Save();
+
+      Airport testAirport1 = new Airport("Milwaukee");
+      testAirport1.Save();
+
+      Airport testAirport2 = new Airport("Chicago");
+      testAirport2.Save();
+
+      testFlight.AddAirport(testAirport1);
+      List<Airport> result = testFlight.GetAirports();
+      List<Airport> testList = new List<Airport> {testAirport1};
+
+      Assert.Equal(testList, result);
+    }
+    [Fact]
+    public void Delete_DeletesFlightAssociationsFromDataBase_FlightList()
+    {
+      Airport testAirport = new Airport("Milwaukee");
+      testAirport.Save();
+
+      string testCity = "to Denver";
+      Flight testFlight = new Flight(testCity);
+      testFlight.Save();
+
+      testFlight.AddAirport(testAirport);
+      testFlight.Delete();
+
+      List<Flight> result = testAirport.GetFlights();
+      List<Flight> test = new List<Flight>{};
+
+      Assert.Equal(test, result);
+    }
+
+    public void Dispose()
     {
       Flight.DeleteAll();
       Airport.DeleteAll();
