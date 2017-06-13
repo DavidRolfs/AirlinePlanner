@@ -1,0 +1,27 @@
+
+<h1>Fligt Planner</h1>
+<h2>Task: @Model["flight"].GetCity()</h2>
+<hr />
+@if (@Model["flightAirport"].Count != 0)
+{
+  <h4>This flights has these airports:</h4>
+  <ul>
+    @foreach (var airport in @Model["flightAirport"])
+    {
+      <li>@airport.GetName()</li>
+    }
+  </ul>
+}
+<h4>Add a Airport to this task:</h4>
+<form action='/flights/add_airport' method='post'>
+  <input id='flight-id' name='flight-id' type='hidden' value='@Model["flight"].GetId()'>
+  <label for='airport-id'>Select a Airport</label>
+  <select id='airport-id' name='airport-id' type='text'>
+    @foreach (var airport in @Model["allAirports"])
+    {
+      <option value='@airport.GetId()'>@airport.GetName()</option>
+    }
+  </select>
+  <button type='submit'>Add</button>
+</form>
+<p><a href="/">Return to Main Page</a></p>

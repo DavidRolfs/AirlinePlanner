@@ -37,6 +37,38 @@ namespace Planner
         newAirport.Save();
         return View["success.cshtml"];
       };
+      Get["flights/{id}"] = parameters => {
+        Dictionary<string, object> model = new Dictionary<string, object>();
+        Flight SelectedFlight = Flight.Find(parameters.id);
+        List<Airport> FlightAirport = SelectedFlight.GetAirports();
+        List<Airport> AllAirports = Airport.GetAll();
+        model.Add("flight", SelectedFlight);
+        model.Add("flightAirport", FlightAirport);
+        model.Add("allAirports", AllAirports);
+        return View["flight.cshtml", model];
+      };
+      Get["airports/{id}"] = parameters => {
+        Dictionary<string, object> model = new Dictionary<string, object>();
+        Airport SelectedAirport = Airport.Find(parameters.id);
+        List<Flight> AirportFlight = SelectedAirport.GetFlights();
+        List<Flight> AllFlights = Flight.GetAll();
+        model.Add("airport", SelectedAirport);
+        model.Add("airportFlight", AirportFlight);
+        model.Add("allFlights", AllFlights);
+        return View["airport.cshtml", model];
+      };
+      Post["flights/add_airport"] = _ => {
+        Airport airport = Airport.Find(Request.Form["airport-id"]);
+        Flight flight = Flight.Find(Request.Form["flight-id"]);
+        flight.AddAirport(airport);
+        return View["success.cshtml"];
+      };
+      Post["airports/add_flight"]= _ => {
+        Airport airport = Airport.Find(Request.Form["airport-id"]);
+        Flight flight = Flight.Find(Request.Form["flight-id"]);
+        airport.AddFlight(flight);
+        return View["success.cshtml"];
+      };
 
     }
   }
